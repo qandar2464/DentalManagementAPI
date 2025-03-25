@@ -1,0 +1,59 @@
+﻿@model IEnumerable<DentalManagementAPI.Models.Patient>
+
+<h2 class="text-center mt-4">🏥 Patients List</h2>
+
+<!-- Search Bar -->
+<div class="container mt-3">
+    <input type="text" class="form-control" id="search" placeholder="Search for patients">
+</div>
+
+<!-- Patient Table -->
+<div class="container mt-3">
+    <table class="table table-bordered" id="patientTable">
+        <thead class="thead-dark">
+            <tr>
+                <th>Patient Name</th>
+                <th>DOB</th>
+                <th>Email</th>
+                <th>Appointment Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in Model)
+            {
+                <tr>
+                    <td>@patient.PatientName</td>
+                    <td>@patient.DOB.ToShortDateString()</td>
+                    <td>@patient.Email</td>
+                    <td>@patient.AppointmentDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@patient.PatientID" class="btn btn-sm btn-warning">✏ Edit</a>
+                        <a asp-action="Delete" asp-route-id="@patient.PatientID" class="btn btn-sm btn-danger"> Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- JavaScript for Search Functionality -->
+<script>
+    document.getElementById('search').addEventListener('input', function(event) {
+        const searchText = event.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#patientTable tbody tr');
+        rows.forEach(row => {
+            const nameCell = row.querySelector('td:nth-child(1)');
+            if (nameCell && nameCell.textContent.toLowerCase().includes(searchText)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<!-- Add New Patient Button -->
+<div class="text-center mt-3">
+    <a asp-action="Create" class="btn btn-success btn-lg">➕ Add New Patient</a>
+</div>

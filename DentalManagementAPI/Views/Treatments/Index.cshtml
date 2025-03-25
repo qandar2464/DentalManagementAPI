@@ -1,0 +1,61 @@
+﻿@model IEnumerable<DentalManagementAPI.Models.Treatment>
+
+<h2 class="text-center mt-4">💉 Treatments List</h2>
+
+<!-- Search Bar -->
+<div class="container mt-3">
+    <input type="text" class="form-control" id="search" placeholder="Search for Treatment Name or Specialist">
+</div>
+<BR></BR>
+
+<!-- Treatments Table -->
+<table class="table table-bordered" id="treatmentTable">
+    <thead class="thead-dark">
+        <tr>
+            <th>Treatment Name</th>
+            <th>Treatment Specialist</th>
+            <th>Treatment Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var treatment in Model)
+        {
+            <tr>
+                <td>@treatment.TreatmentName</td>
+                <td>@treatment.TreatmentSpecialist</td>
+                <td>@treatment.TreatmentPrice.ToString("C")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@treatment.TreatmentID" class="btn btn-sm btn-warning">✏️ Edit</a>
+                    <a asp-action="Delete" asp-route-id="@treatment.TreatmentID" class="btn btn-sm btn-danger">🗑️ Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    document.getElementById('search').addEventListener('input', function(event) {
+        const searchText = event.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#treatmentTable tbody tr');
+
+        rows.forEach(row => {
+            const nameCell = row.querySelector('td:nth-child(1)'); 
+            const specialistCell = row.querySelector('td:nth-child(2)'); 
+
+
+            if ((nameCell && nameCell.textContent.toLowerCase().includes(searchText)) ||
+                (specialistCell && specialistCell.textContent.toLowerCase().includes(searchText))) {
+                row.style.display = '';  
+            } else {
+                row.style.display = 'none';  
+            }
+        });
+    });
+</script>
+
+
+<div class="text-center mt-3">
+    <a asp-action="Create" class="btn btn-success btn-lg">➕ Add New Treatment</a>
+</div>
